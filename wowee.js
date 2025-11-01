@@ -24,3 +24,48 @@ const volumeSlider = document.getElementById('volumeSlider');
 const volumeLevel = document.getElementById('volumeLevel');
 
 audio.volume = 0.7;
+
+function loadTrack(index) {
+    audio.src = tracks[index].file;
+    trackName.textContent = tracks[index].name;
+    if (isPlaying) {
+        audio.play();
+    }
+}
+
+function togglePlay() {
+    if (isPlaying) {
+        audio.pause();
+        playBtn.textContent = '▶';
+        reel1.classList.remove('spinning');
+        reel2.classList.remove('spinning');
+    } else {
+        audio.play();
+        playBtn.textContent = '0';
+        reel1.classList.add('spinning');
+        reel2.classList.add('spinning');
+    }
+    isPlaying = !isPlaying;
+}
+
+function nextTrack(){
+    currentTrack = (currentTrack + 1) % tracks.length;
+    loadTrack(currentTrack);
+}
+
+function prevTrack(){
+    currentTrack = (currentTrack - 1 + tracks.length) % tracks.length;
+    loadTrack(currentTrack);
+}
+
+function toggleLoop() {
+    isLooping = !isLooping;
+    audio.loop = isLooping;
+    loopBtn.classList.toggle('active', isLooping);
+}
+
+function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor (seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+}
