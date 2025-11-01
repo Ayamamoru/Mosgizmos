@@ -1,5 +1,5 @@
 const tracks = [
-    { name: 'Bubbly', 'Bubbly.mp3' },
-    { name: 'Wall', 'Wall.mp3'},
-    { name: 'Madeline', 'Madeline (fr.Loupe).mp3'}
+    { name: 'Bubbly', file: 'Bubbly.mp3' },
+    { name: 'Wall', file: 'Wall.mp3' },
+    { name: 'Madeline', file: 'Madeline (fr.Loupe).mp3' }
 ];
