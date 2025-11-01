@@ -7,7 +7,7 @@ What is your project?
 - This is Mosgizmos and uh basically I wanted to have a place to make lil features without potentially breaking my site by straight up jamming them in there... Currently, it's just a simple music player!
 
 Why did you make your project?
-- I wanted to test an ide (wow, a success!) so I can hopefully replicate a smaller version of it on my personal website!
+- I wanted to test an idea (wow, a success!) so I can hopefully replicate a smaller version of it on my personal website!
 
 How you made your project
 - I used github codespaces, html, js and css! 
