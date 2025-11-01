@@ -24,9 +24,13 @@ const reel2 = document.getElementById('reel2');
 const volumeSlider = document.getElementById('volumeSlider');
 const volumeLevel = document.getElementById('volumeLevel');
 
+let _lastRequestedFile = null;
+let _triedEncodeURI = false;
+
 function setAudioSource(file) {
-    const encoded = './' + encodeURIComponent(file);
-    audio.src = encoded;
+    _lastRequestedFile = file;
+    _triedEncodeURI = false;
+    audio.src = new URL(file, document.baseURI).href;
     audio.load();
 }
 
@@ -35,9 +39,7 @@ function loadTrack(index) {
     setAudioSource(tracks[index].file);
     if (trackName) trackName.textContent = tracks[index].name;
     if (isPlaying) {
-        audio.play().catch((err) => {
-            console.warn('Playback prevented:', err);
-        });
+        audio.play().catch(() => {});
     }
 }
 
@@ -49,9 +51,7 @@ function togglePlay() {
         reel1?.classList.remove('spinning');
         reel2?.classList.remove('spinning');
     } else {
-        audio.play().catch((err) => {
-            console.warn('Play() failed:', err);
-        });
+        audio.play().catch(() => {});
         if (playBtn) playBtn.textContent = '⏸';
         reel1?.classList.add('spinning');
         reel2?.classList.add('spinning');
@@ -110,6 +110,13 @@ audio.addEventListener('ended', () => {
 });
 
 audio.addEventListener('error', (e) => {
+    if (_lastRequestedFile && !_triedEncodeURI) {
+        _triedEncodeURI = true;
+        audio.src = new URL(encodeURI(_lastRequestedFile), document.baseURI).href;
+        audio.load();
+        if (isPlaying) audio.play().catch(() => {});
+        return;
+    }
     console.error('Audio error loading', audio.src, e);
 });
 
