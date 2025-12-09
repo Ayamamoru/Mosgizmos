@@ -102,7 +102,7 @@
 
     .progress {
         height: 100%;
-        background: linear-gradient(90deg,#667eea, #7b4ba2);
+        background: linear-gradient(90deg,#6da362, #569449);
         width: 0%;
         transition: width 0.1s;
     }
@@ -126,17 +126,22 @@
         width: 45px;
         height: 45px;
         border-radius: 50%;
-        background: linear-gradient (145deg, #3a3a3a, #2a2a2a);
+        background: #f0f0f0;
         border: none;
         color: #1c5402;
         font-size: 18px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-        transition: all 0.2s    
+        box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+        transition: all 0.12s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+        padding: 0;
         }
 
     .btn:hover {
-        background: linear-gradient(145deg, #2a2a2a, #3a3a3a);
-        transform: translateY(-2px);
+        background: linear-gradient(145deg, #3a3a3a, #2a2a2a);
+        /* transform: translateY(-2px); - - - If you want the button hover animation, just uncomment this */
     }
 
     .btn:active{
@@ -144,14 +149,23 @@
     }
     
     .btn.play {
-        width: 55px;
-        height: 55px;
-        font-size: 24px;
+        width: 45px;
+        height: 45px;
+        font-size: 18px;
     }
 
     .btn:active {
-        background: linear-gradient(145deg, #667eea, #764ba2);
+        background: #dedede;
     }
+
+    .btn.active {
+        background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    }
+
+    .btn.active:hover {
+        background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    }
+
     .volume-control {
             display: flex;
             align-items: center;
@@ -171,7 +185,7 @@
 
         .volume-level {
             height: 100%;
-            background: linear-gradient(90deg, #92ea66, #03692a);
+            background: linear-gradient(90deg, #92ea66, #1f721f);
             width: 70%;
             border-radius: 3px;
         }

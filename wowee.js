@@ -1,6 +1,8 @@
 const tracks = [
-    { name: 'Bubbly', file: 'Bubbly.mp3' },
-    { name: 'Wall', file: 'Wall.mp3' },
+    { name: 'Bubbly - Good Kid', file: 'Bubbly.mp3' },
+    { name: 'Wall - Good Kid', file: 'Wall.mp3' },
+    { name : 'Madeleine - Good Kid ft. Loupe', file: "Madeleine (ft. Loupe).mp3" },
+    { name: 'Julie - The Fur.', file: 'Julie.mp3' }
 ];
 
 let currentTrack = 0;
@@ -60,15 +62,29 @@ function togglePlay() {
 }
 
 function nextTrack() {
-    currentTrack = (currentTrack + 1) % tracks.length;
-    loadTrack(currentTrack);
-    if (isPlaying) audio.play().catch(() => {});
+    if (isLooping) {
+        // If looping, restart the current track
+        audio.currentTime = 0;
+        if (isPlaying) audio.play().catch(() => {});
+    } else {
+        // Otherwise go to next track
+        currentTrack = (currentTrack + 1) % tracks.length;
+        loadTrack(currentTrack);
+        if (isPlaying) audio.play().catch(() => {});
+    }
 }
 
 function prevTrack() {
-    currentTrack = (currentTrack - 1 + tracks.length) % tracks.length;
-    loadTrack(currentTrack);
-    if (isPlaying) audio.play().catch(() => {});
+    if (isLooping) {
+        // makes the thing loop the current track
+        audio.currentTime = 0;
+        if (isPlaying) audio.play().catch(() => {});
+    } else {
+        // otherwise it goes to the prev track
+        currentTrack = (currentTrack - 1 + tracks.length) % tracks.length;
+        loadTrack(currentTrack);
+        if (isPlaying) audio.play().catch(() => {});
+    }
 }
 
 function toggleLoop() {
@@ -120,22 +136,54 @@ audio.addEventListener('error', (e) => {
     console.error('Audio error loading', audio.src, e);
 });
 
-progressBar?.addEventListener('click', (e) => {
+// dragg the progress weee
+let isDraggingProgress = false;
+function updateProgressFromMouse(e) {
+    if (!progressBar) return;
     const rect = progressBar.getBoundingClientRect();
-    const percent = (e.clientX - rect.left) / rect.width;
+    const percent = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
     if (audio.duration) {
-        audio.currentTime = Math.max(0, Math.min(1, percent)) * audio.duration;
+        audio.currentTime = percent * audio.duration;
     }
+}
+progressBar?.addEventListener('mousedown', () => {
+    isDraggingProgress = true;
+});
+document.addEventListener('mousemove', (e) => {
+    if (isDraggingProgress) updateProgressFromMouse(e);
+});
+document.addEventListener('mouseup', () => {
+    isDraggingProgress = false;
+});
+progressBar?.addEventListener('click', (e) => {
+    updateProgressFromMouse(e);
 });
 
-volumeSlider?.addEventListener('click', (e) => {
+// drag the volume www
+let isDraggingVolume = false;
+function updateVolumeFromMouse(e) {
+    if (!volumeSlider) return;
     const rect = volumeSlider.getBoundingClientRect();
-    const percent = (e.clientX - rect.left) / rect.width;
-    audio.volume = Math.max(0, Math.min(1, percent));
-    if (volumeLevel) volumeLevel.style.width = (Math.max(0, Math.min(1, percent)) * 100) + '%';
+    const percent = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    audio.volume = percent;
+    if (volumeLevel) volumeLevel.style.width = (percent * 100) + '%';
+}
+volumeSlider?.addEventListener('mousedown', () => {
+    isDraggingVolume = true;
+});
+document.addEventListener('mousemove', (e) => {
+    if (isDraggingVolume) updateVolumeFromMouse(e);
+});
+document.addEventListener('mouseup', () => {
+    isDraggingVolume = false;
+});
+volumeSlider?.addEventListener('click', (e) => {
+    updateVolumeFromMouse(e);
 });
 
 if (trackName) trackName.textContent = tracks[currentTrack].name;
 if (volumeLevel) volumeLevel.style.width = (audio.volume * 100) + '%';
+
+if (isLooping && loopBtn) loopBtn.classList.add('active');
 
 loadTrack(currentTrack);
